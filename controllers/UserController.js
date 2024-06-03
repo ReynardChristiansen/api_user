@@ -90,7 +90,11 @@ const loginUser = async (req, res) => {
     
     if(user_password == user.user_password){
         const token = jwt.sign({ userId: user._id, user_role: user.user_role }, JWT_SECRET, { expiresIn: '1h' });
-        res.json({ token });
+        return res.json({
+            user_name: user.user_name,
+            user_id: user._id,
+            token: token
+        });
     }else{
         return res.status(400).json({ error: "Invalid credentials" });
     }
