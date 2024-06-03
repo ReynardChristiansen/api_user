@@ -11,9 +11,6 @@ const authenticateToken = (req, res, next) => {
     try {
         const verified = jwt.verify(token, JWT_SECRET);
         req.user = verified;
-        res.cookie("token", token, {
-            httpOnly: true,
-        });
         next();
     } catch (error) {
         console.error('JWT verification error:', error);
