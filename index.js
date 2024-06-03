@@ -4,16 +4,9 @@ const mongoose = require('mongoose');
 const userRoutes = require('./routes/users');
 const cors = require('cors');
 
-const corsConfig = {
-    origin: "*",
-    credential: true,
-    methods: ["GET", "POST", "PUT", "DELETE"]
-}
-
 const app = express();
 
-app.options("", cors(corsConfig));
-app.use(cors(corsConfig));
+app.use(cors());
 
 // Middleware
 app.use(express.json());
