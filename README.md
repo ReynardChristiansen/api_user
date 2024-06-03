@@ -42,4 +42,8 @@ Login a user require a request body in the following format:
             "user_password": STRING,
     }
 
+## Feedback
+
+If you have any feedback, please reach out to me at reynard.satria@gmail.com
+
 
