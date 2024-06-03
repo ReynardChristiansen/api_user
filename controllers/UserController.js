@@ -3,10 +3,10 @@ const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// Get all songs
+// Get all users
 const getUsers = async (req, res) => {
-    const songs = await User.find({}).sort({ createdAt: -1 })
-    res.status(200).json(songs)
+    const users = await User.find({}).sort({ createdAt: -1 })
+    res.status(200).json(users)
 }
 
 // Get a single user
@@ -31,12 +31,19 @@ const createUser = async (req, res) => {
     const { user_name, user_password, user_role } = req.body;
 
     try {
+        const existingUser = await User.findOne({ user_name });
+
+        if (existingUser) {
+            return res.status(400).json({ error: "User name already exists" });
+        }
+
         const user = await User.create({ user_name, user_password, user_role });
         res.status(200).json(user);
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
 };
+
 
 // Delete a user
 const deleteUser = async (req, res) => {
