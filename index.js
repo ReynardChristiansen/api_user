@@ -5,8 +5,12 @@ const userRoutes = require('./routes/users');
 const cors = require('cors');
 
 const app = express();
-
-app.use(cors());
+const corsConfig = {
+    origin: "*",
+    credential: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+}
+app.use(cors(corsConfig));
 
 // Middleware
 app.use(express.json());
