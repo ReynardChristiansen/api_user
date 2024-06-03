@@ -1,6 +1,5 @@
 const User = require('../models/UserModel')
 const mongoose = require('mongoose')
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -31,10 +30,8 @@ const getUser = async (req, res) => {
 const createUser = async (req, res) => {
     const { user_name, user_password, user_role } = req.body;
 
-    const hashedPassword = await bcrypt.hash(user_password, 10);
-
     try {
-        const user = await User.create({ user_name, user_password: hashedPassword, user_role });
+        const user = await User.create({ user_name, user_password, user_role });
         res.status(200).json(user);
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -83,14 +80,14 @@ const loginUser = async (req, res) => {
     if (!user) {
         return res.status(400).json({ error: "Invalid credentials" });
     }
-
-    const isMatch = await bcrypt.compare(user_password, user.user_password);
-    if (!isMatch) {
+    
+    if(user_password == user.user_password){
+        const token = jwt.sign({ userId: user._id, user_role: user.user_role }, JWT_SECRET, { expiresIn: '1h' });
+        res.json({ token });
+    }else{
         return res.status(400).json({ error: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ userId: user._id, user_role: user.user_role }, JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token });
 };
 
 module.exports = {
