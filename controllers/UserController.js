@@ -93,6 +93,7 @@ const loginUser = async (req, res) => {
         return res.json({
             user_name: user.user_name,
             user_id: user._id,
+            user_role: user.user_role,
             token: token
         });
     }else{
