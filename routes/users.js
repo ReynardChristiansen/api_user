@@ -4,13 +4,13 @@ const authenticateToken = require('../middleware/AuthMiddleware');
 const router = express.Router();
 
 // Public routes
-router.post('/login', loginUser);
-router.post('/register', createUser);
+// router.post('/login', loginUser);
+// router.post('/register', createUser);
 
 // Protected routes
-router.get('/', authenticateToken, getUsers);
-router.get('/:id', authenticateToken, getUser);
-router.delete('/:id', authenticateToken, deleteUser);
-router.patch('/:id', authenticateToken, updateUser);
+router.get('/', getUsers);
+router.get('/:id', getUser);
+router.delete('/:id', deleteUser);
+router.patch('/:id', updateUser);
 
 module.exports = router;
