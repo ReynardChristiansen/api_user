@@ -42,6 +42,13 @@ Login a user require a request body in the following format:
             "user_password": STRING,
     }
 
+## Technology
+
+This API uses the following technologies:
+
+- jsonwebtoken: Used to generate the authorization tokens for secure access to protected endpoints.
+- crypto-js: Utilized for cryptographic operations, ensuring the security of user passwords and other sensitive information.
+
 ## Feedback
 
 If you have any feedback, please reach out to me at reynard.satria@gmail.com
