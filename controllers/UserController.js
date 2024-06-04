@@ -2,7 +2,7 @@ const User = require('../models/UserModel')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET;
-
+const CryptoJS = require("crypto-js");
 // Get all users
 const getUsers = async (req, res) => {
     const users = await User.find({}).sort({ createdAt: -1 })
@@ -37,7 +37,10 @@ const createUser = async (req, res) => {
             return res.status(400).json({ error: "User name already exists" });
         }
 
-        const user = await User.create({ user_name, user_password, user_role });
+        // Hash the password
+        const hashedPassword = CryptoJS.SHA256(user_password).toString(CryptoJS.enc.Hex);
+
+        const user = await User.create({ user_name, user_password: hashedPassword, user_role });
         res.status(200).json(user);
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -88,7 +91,11 @@ const loginUser = async (req, res) => {
         return res.status(400).json({ error: "Invalid credentials" });
     }
     
-    if(user_password == user.user_password){
+    // Hash the provided password
+    const hashedPassword = CryptoJS.SHA256(user_password).toString(CryptoJS.enc.Hex);
+
+    // Compare the hashed password with the hashed password stored in the database
+    if(hashedPassword === user.user_password){
         const token = jwt.sign({ userId: user._id, user_role: user.user_role }, JWT_SECRET, { expiresIn: '1h' });
         return res.json({
             user_name: user.user_name,
